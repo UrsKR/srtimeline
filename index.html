@@ -19,7 +19,7 @@
 				font-size: 11px;
 			}
 			
-			.label {
+			.mark {
 				font-family: sans-serif;
 				font-size: 11px;
 				fill: black;			
@@ -56,11 +56,14 @@
 						.attr("width", w)
 						.attr("height", h+xPadding);
 						
-			svg.selectAll("circle")
+			var mark = svg.selectAll("circle")
 			   .data(dataset)
 			   .enter()
-			   .append("circle")
+			   .append("g")
 			   .attr("class","mark")
+			   .attr("transform", "translate(" + padding + ","+ xPadding+")");
+			   
+			   mark.append("circle")
 			   .attr("cx", function(d) {
 			   		return 0;
 			   })
@@ -69,14 +72,9 @@
 			   })
 			   .attr("r", function(d) {
 			   		return 2;
-			   })
-			   .attr("transform", "translate(" + padding + ","+ xPadding+")");
-
-			svg.selectAll("text")
-			   .data(dataset)
-			   .enter()
-			   .append("text")
-			   .attr("class","label")
+			   });
+			   
+			   mark.append("text")
 			   .text(function(d) {
 			   		return d[1];
 			   })
@@ -85,15 +83,14 @@
 			   })
 			   .attr("y", function(d) {
 			   		return  yScale(format.parse(d[0]))+4;
-			   })
-			   .attr("transform", "translate(" + padding + ","+ xPadding+")")
+			   });
 			   			   
 			svg.append("g")
 				.attr("class","axis")
 				.attr("transform", "translate(" + padding + ","+ xPadding+")")
 				.call(yAxis);
 				
-			svg.selectAll(".label")
+			svg.selectAll(".mark")
 				.on("mouseover", function(data,index) {
 					d3.select(this).style("fill","red");
 				})
