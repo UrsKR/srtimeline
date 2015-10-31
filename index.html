@@ -36,7 +36,9 @@
 			var format = d3.time.format("%Y-%m-%d");			
 			//Width and height
 			var w = 500;
-			var h = d3.max(dataset, function(d) {return format.parse(d[0]).getTime()/1000000000; })
+			var h = d3.max(dataset, function(d) {
+				return format.parse(d[0]).getTime()/1000000000; 
+			});
 			var xPadding = 100;	
 			var yPadding = 15;	
 	
