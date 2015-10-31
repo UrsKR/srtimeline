@@ -36,8 +36,8 @@
 			var format = d3.time.format("%Y-%m-%d");			
 			//Width and height
 			var w = 500;
-			var h = d3.max(dataset, function(d) {
-				return format.parse(d[0]).getTime()/1000000000; 
+			var h = d3.max(events, function(d) {
+				return format.parse(d.date).getTime()/1000000000; 
 			});
 			var xPadding = 100;	
 			var yPadding = 15;	
@@ -45,8 +45,8 @@
 	
 			var yScale = d3.time.scale()
 				.domain(
-					[d3.min(dataset, function(d) {return format.parse(d[0]); }), 
-					d3.max(dataset, function(d) {return format.parse(d[0]); })])
+					[d3.min(events, function(d) {return format.parse(d.date); }), 
+					d3.max(events, function(d) {return format.parse(d.date); })])
 				.range([h-yPadding, 0]);
 								 
 			var yAxis = d3.svg.axis()
@@ -61,12 +61,12 @@
 				.attr("height", h+yPadding);
 						
 			var mark = svg.selectAll()
-			    .data(dataset)
+			    .data(events)
 			    .enter()
 			    .append("g")
 			    .attr("class","mark")
 			    .attr("transform", function(d){
-					return "translate("+xPadding+", "+(yPadding+yScale(format.parse(d[0])))+")"
+					return "translate("+xPadding+", "+(yPadding+yScale(format.parse(d.date)))+")"
 			    });
 			   
 			mark.append("circle")
@@ -82,7 +82,7 @@
 			   
 			mark.append("text")
 			    .text(function(d) {
-			   		return d[1];
+			   		return d.title;
 			    })
 			    .attr("x", function(d) {
 			   		return 5;
