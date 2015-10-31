@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Shadowrun Timeline</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<style type="text/css">
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+			
+			.label {
+				font-family: sans-serif;
+				font-size: 11px;
+				fill: red;			
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var dataset = [
+							['2011-12-24', 'Awakening'],
+							['2012-05-23', 'UGE'],
+							['2020-03-32', 'Goblinization'],
+							['2029-04-01', 'First Crash'],
+							['2050-01-01', 'Present day of SR1'],
+							['2053-01-01', 'Present day of SR2'],
+							['2060-01-01', 'Present day of SR3'],
+							['2072-01-01', 'Present day of SR4'],
+							['2075-01-01', 'Present day of SR5']
+						  ];
+			
+			var format = d3.time.format("%Y-%m-%d");
+			
+			//Width and height
+			var w = 500;
+			var h = d3.max(dataset, function(d) {return format.parse(d[0]).getTime()/1000000000; })
+			var padding = 100;			
+	
+			var yScale = d3.time.scale()
+								 .domain(
+								   [d3.min(dataset, function(d) {return format.parse(d[0]); }), 
+									d3.max(dataset, function(d) {return format.parse(d[0]); })])
+								 .range([h-padding, 0]);
+								 
+			var yAxis = d3.svg.axis()
+							  .scale(yScale)
+							  .orient("left")
+							  .ticks(d3.time.years);
+
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h+padding);
+						
+			svg.selectAll("circle")
+			   .data(dataset)
+			   .enter()
+			   .append("circle")
+			   .attr("cx", function(d) {
+			   		return 0;
+			   })
+			   .attr("cy", function(d) {
+			   		return  yScale(format.parse(d[0]));
+			   })
+			   .attr("r", function(d) {
+			   		return 2;
+			   })
+			   .attr("transform", "translate(" + padding + ","+ padding+")");
+
+			svg.selectAll("text")
+			   .data(dataset)
+			   .enter()
+			   .append("text")
+			   .attr("class","label")
+			   .text(function(d) {
+			   		return d[1];
+			   })
+			   .attr("x", function(d) {
+			   		return 5;
+			   })
+			   .attr("y", function(d) {
+			   		return  yScale(format.parse(d[0]))+4;
+			   })
+			   .attr("transform", "translate(" + padding + ","+ padding+")")
+			   			   
+			svg.append("g")
+				.attr("class","axis")
+				.attr("transform", "translate(" + padding + ","+ padding+")")
+				.call(yAxis);
+		</script>
+	</body>
+</html>
