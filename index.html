@@ -89,9 +89,24 @@
 			svg.selectAll(".mark")
 				.on("mouseover", function(data,index) {
 					d3.select(this).style("fill","red");
+					var allMarks = d3.selectAll(".mark");
+					var editions = allMarks.filter(function(candidate,index){
+						var candidateLabels = d3.set(candidate.labels);
+						for (i = 0; i < data.labels.length; i++) {
+							var dataLabel = data.labels[i];
+							if (candidateLabels.has(dataLabel)){
+								return true;
+							}
+						}
+						return false;
+					});
+					editions.each(function(data,index){
+						var mark = d3.select(this);
+						mark.style("font-weight","bold")
+					});
 				})
 				.on("mouseout", function(data,index) {
-					d3.select(this).style("fill",null);
+					d3.selectAll(".mark").style("fill",null).style("font-weight",null);;
 				});
 		</script>
 	</body>
